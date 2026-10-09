@@ -78,3 +78,9 @@ header{min-height:70px;padding:10px 3%;gap:12px}
 .header-actions #sync-message.sync-error,.header-actions #sync-message.sync-error small{color:#926810}
 .header-actions #sync-message details{max-width:360px;text-align:right}
 @media(max-width:760px){.header-actions{width:100%;align-items:flex-end;margin-left:0}.header-actions #sync-message{align-items:flex-end}.header-actions #sync-message b{font-size:14px}.header-actions #sync-message small{font-size:13px}}
+
+/* Reset inherited filter flex sizing after moving status into the header. */
+header .header-actions{flex:0 1 auto;align-self:center}
+header .header-actions #sync-message{flex:0 0 auto;flex-basis:auto;width:auto;height:auto;min-height:0;margin:0;justify-content:flex-start}
+header{height:auto;min-height:0;align-items:center}
+@media(max-width:760px){header .header-actions{flex:0 1 auto;width:100%}}
