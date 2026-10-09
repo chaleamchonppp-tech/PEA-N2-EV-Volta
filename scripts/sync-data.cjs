@@ -15,6 +15,7 @@ const book=XLSX.read(bytes,{type:'array',cellDates:true,sheetRows:10001});
 const a=book.Sheets['จำนวนสถานีชาร์จ'],b=book.Sheets['ประวัติการซ่อมแซม'];
 if(!a||!b)throw Error('ไม่พบแท็บทะเบียนหรือประวัติการซ่อม');
 const chargers=PatrolExcel.parseRows(XLSX.utils.sheet_to_json(a,{header:1,defval:null}),XLSX.utils.sheet_to_json(b,{header:1,defval:null}));
+if(!chargers.length)throw Error('ไม่พบข้อมูลเครื่องชาร์จ เก็บข้อมูลเดิมไว้');
 const changed=JSON.stringify(old.chargers)!==JSON.stringify(chargers);
 const data={...old,chargers,revision:old.revision+(changed?1:0),updatedAt:changed?now:old.updatedAt,canEdit:false,signedIn:false,source:{...old.source,connected:true,error:null,lastChecked:now,lastSuccess:now}};
 if(changed){
@@ -25,10 +26,13 @@ history.history=history.history.slice(0,100);
 fs.writeFileSync('data/history.json',JSON.stringify(history));
 }
 fs.writeFileSync('data/dataset.json',JSON.stringify(data));
+if(process.env.GITHUB_STEP_SUMMARY)fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,'### อ่าน Google Sheets: สำเร็จ\n'+chargers.length+' เครื่อง · '+now+'\n');
 console.log('Read '+chargers.length+' chargers successfully.');
 }catch(error){
 old.source={...old.source,connected:false,error:String(error.message),lastChecked:now};
 fs.writeFileSync('data/dataset.json',JSON.stringify(old));
+if(process.env.GITHUB_STEP_SUMMARY)fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,'### อ่าน Google Sheets: ไม่สำเร็จ\nเก็บข้อมูลเดิมไว้ กรุณาตรวจขั้นตอน Read Google Sheets\n');
 console.error('Sync failed; previous data retained:',error.message);
+process.exitCode=1;
 }
 })();

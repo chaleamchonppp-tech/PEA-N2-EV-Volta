@@ -26,6 +26,8 @@ jobs:
         with:
           node-version: '22'
       - name: Read Google Sheets
+        id: sheet
+        continue-on-error: true
         run: node scripts/sync-data.cjs
       - name: Save refreshed data
         run: |
@@ -59,3 +61,19 @@ jobs:
         if: steps.deployment.outcome == 'failure'
         id: retry
         uses: actions/deploy-pages@v4
+      - name: Summarize publication
+        if: always()
+        env:
+          READ_RESULT: ${{ steps.sheet.outcome }}
+          DEPLOY_RESULT: ${{ steps.deployment.outcome }}
+          RETRY_RESULT: ${{ steps.retry.outcome }}
+        run: |
+          if [ "$DEPLOY_RESULT" = "success" ] || [ "$RETRY_RESULT" = "success" ]; then
+            echo "### เผยแพร่เว็บ: สำเร็จ" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### เผยแพร่เว็บ: ไม่สำเร็จ" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$READ_RESULT" != "success" ]; then
+            echo "เผยแพร่ข้อมูลเดิมพร้อมสถานะอ่านชีตไม่สำเร็จ" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
