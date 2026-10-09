@@ -14,7 +14,7 @@ async function refreshDataset(){
  const fresh=!!src?.connected&&Number.isFinite(age)&&age>=-60000&&age<=45*60*1000;
  message.className=fresh?'sync-success':'sync-error';
  message.title='เว็บตรวจสอบ '+dateTime(new Date().toISOString())+' · สีส้มเมื่ออ่านไม่สำเร็จหรือข้อมูลเกิน 45 นาที';
- message.innerHTML=`<b><i class="sync-dot ${fresh?'success':'warning'}" aria-hidden="true"></i>${fresh?'อัปเดตสำเร็จ':'ข้อมูลอาจล่าช้า'}</b><small>ข้อมูล ${lastRead?esc(dateTime(lastRead)):'—'} · ตรวจทุก 15 นาที</small>`;
+ message.innerHTML=`<b><i class="sync-dot ${fresh?'success':'warning'}" aria-hidden="true"></i>${fresh?'Google Sheets · อัปเดตล่าสุดสำเร็จ':'Google Sheets · ข้อมูลอาจล่าช้า'}</b><small>ข้อมูล ${lastRead?esc(dateTime(lastRead)):'—'} · ตรวจทุก 15 นาที</small>`;
  }
 
  $('#history-open').disabled=false;$('#export').disabled=false;

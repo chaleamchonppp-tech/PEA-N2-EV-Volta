@@ -68,3 +68,13 @@ header{min-height:70px;padding:10px 3%;gap:12px}
 .controls #refresh-source svg{stroke-width:2.2}
 .controls #source-link{color:#188038}
 .controls #source-link svg{width:23px;height:25px}
+
+/* Source status directly beneath the header actions. */
+.header-actions{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:0;max-width:100%}
+.header-actions .controls{margin:0;justify-content:flex-end}
+.header-actions #sync-message{display:flex;flex-direction:column;align-items:flex-end;gap:1px;border:0;background:transparent;padding:0;min-height:0;max-width:100%;font-size:14px;line-height:1.5;color:#685b6c;overflow-wrap:anywhere}
+.header-actions #sync-message b{font-size:14px;font-weight:500;line-height:1.5}
+.header-actions #sync-message small{font-size:13px;color:#827487;line-height:1.5}
+.header-actions #sync-message.sync-error,.header-actions #sync-message.sync-error small{color:#926810}
+.header-actions #sync-message details{max-width:360px;text-align:right}
+@media(max-width:760px){.header-actions{width:100%;align-items:flex-end;margin-left:0}.header-actions #sync-message{align-items:flex-end}.header-actions #sync-message b{font-size:14px}.header-actions #sync-message small{font-size:13px}}
